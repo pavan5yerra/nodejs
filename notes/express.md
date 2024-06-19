@@ -58,7 +58,7 @@ Using routes instead of individual methods if the path is the same
 
 
 
-```
+```javascript
 const express = require('express');
 const users = require("./MOCK_DATA.json");
 
@@ -98,14 +98,11 @@ app.listen(PORT , () => console.log("Server is started"));
 
 
 
-Middleware in Express :
-
-
+***Middleware in Express :***
 
 _**Middleware**_ functions are functions that have access to the [﻿request object](https://expressjs.com/en/4x/api.html#req) (`req`), the [﻿response object](https://expressjs.com/en/4x/api.html#res) (`res`), and the `next` function in the application’s request-response cycle. 
 
 The `next` function is a function in the Express router that, when invoked, executes the middleware succeeding the current middleware.
-
 
 
 Middleware functions can perform the following tasks:
@@ -117,60 +114,30 @@ Middleware functions can perform the following tasks:
 If the current middleware function does not end the request-response cycle, it must call `next()` to pass control to the next middleware function. Otherwise, the request will be left hanging.
 
 
-
-![image.png](https://eraser.imgix.net/workspaces/RHvayis7uYQNdrSqkxAk/2TpPe0m2nPZODyVZctbl8Rh7kLL2/OEjUEt6eeakFl9MDO9IlM.png?ixlib=js-3.7.0 "image.png")
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/d6f44312-ba64-4a2a-9d23-989da4e406f4)
 
 
 
+***Normal flow without middleware***
 
-Normal flow without middleware
-
-
-
-![image.png](https://eraser.imgix.net/workspaces/RHvayis7uYQNdrSqkxAk/2TpPe0m2nPZODyVZctbl8Rh7kLL2/TwxOgHTP8HXBx4EkgLQBi.png?ixlib=js-3.7.0 "image.png")
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/1477bd33-efaa-4fb3-9d54-6a6ccd3cc16f)
 
 
+***Request and response flow using Middleware***
+
+***Middleware authentication request :***
+
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/00d56b48-d2e3-4f6f-93f9-cc637a69bfcf)
 
 
+***Request and Response with multiple Middlewares***
 
-**Request and response flow using Middleware**
-
-
-
-**Middleware authentication request : **
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/47d9374c-efdf-4cbb-942f-fbcfc3d2ce3c)
 
 
+***Implementing Middlewares***
 
-
-
-![image.png](https://eraser.imgix.net/workspaces/RHvayis7uYQNdrSqkxAk/2TpPe0m2nPZODyVZctbl8Rh7kLL2/F8viRt5cUNHmQFhEdK8XG.png?ixlib=js-3.7.0 "image.png")
-
-
-
-
-
-
-
-
-
-**Request and Response with multiple Middlewares**
-
-
-
-
-
-![image.png](https://eraser.imgix.net/workspaces/RHvayis7uYQNdrSqkxAk/2TpPe0m2nPZODyVZctbl8Rh7kLL2/l9wwKu-ARNuVyIR8_oVxk.png?ixlib=js-3.7.0 "image.png")
-
-
-
-
-
-
-
-Implementing Middle wares  
-
-```
+```javascript
 const express = require('express');
 const fs = require('fs');
 const users = require("./MOCK_DATA.json");
