@@ -1,9 +1,8 @@
 
 
-**What is Authentication? **
+***What is Authentication?***
 
 Authentication is the process of verifying the identity of a user, device, or process. It's often a prerequisite for accessing resources in an information system
-
 
 
 Authentication  has two patterns 
@@ -12,50 +11,23 @@ Authentication  has two patterns
 - **StateLess: maintains on clientside.**
 
 
-**Stateful Authentication : **
-
-****
+***Stateful Authentication :***
 
 **Real World Scenario**
 
 
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/VMRkpZtKv8PzctC-Yt6PX.png?ixlib=js-3.7.0 "image.png")
-
-
-
-
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/ovdNLJ0ebaZPgBVkg4AkL.png?ixlib=js-3.7.0 "image.png")
-
-
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/e3f2675d-f135-40b1-aa39-e590f6be5afd)
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/08f92b2d-2c19-48c7-86ec-cf9a56505687)
 
 
 **In Computer World**
 
 
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/83240bfc-d632-407f-8239-acd946f9a4c0)
 
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/YFrJIieE5UtHktaQRS9ou.png?ixlib=js-3.7.0 "image.png")
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/db44727a-0ce5-4b2f-9f56-2566dd075578)
 
-
-
-
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/nP0abWYzG9GcHkUOc123k.png?ixlib=js-3.7.0 "image.png")
-
-
-
-
-
-
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/XlXBvLeKuvzc5slg7PgI0.png?ixlib=js-3.7.0 "image.png")
-
-
-
-
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/4e00dd96-f92f-4f74-ad5f-4ba6571c2ec1)
 
 
 **Disadvantages of the stateful  approach**
@@ -64,20 +36,10 @@ Authentication  has two patterns
 - We need to manage the state of the server which is memory-intensive
 
 
+**Stateless Authentication:**
 
 
-
-
-**Stateless Authentication :**
-
-
-
-
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/xiZxKe1kUA73gf86dMbWF.png?ixlib=js-3.7.0 "image.png")
-
-
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/f24af511-e1c8-474e-9c17-0a02252d9e08)
 
 
 - In Stateless Authentication, the state is not maintained on a server
@@ -92,54 +54,33 @@ Authentication  has two patterns
 
 ﻿
 
-
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/33fz88a7WhdnT86Fdi1tW.png?ixlib=js-3.7.0 "image.png")
-
-
-
-
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/-kJo9QkbgDVQRLB1WjuzP.png?ixlib=js-3.7.0 "image.png")
-
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/28911d08-cbef-4bb4-b18d-fa03996bbe3c)
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/fa5cb175-00d8-4801-bfc5-867c065e9d53)
 
 
 
 Cookie-based authentication : 
 
-
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/lWx_fImovatE7G3kuQOlI.png?ixlib=js-3.7.0 "image.png")
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/3ac9811b-6f5a-4863-8df3-7e8b983bbfe6)
 
 
 
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/NHeyTHlTCGLR35_Iy92uZ.png?ixlib=js-3.7.0 "image.png")
-
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/8dd3333a-79c6-488a-b393-293bb51c3f98)
 
 
 
 - Each domain has separate cookies. Only cookies related specific domain will be sent on that respective request
 - Cookies are only limited to browsers.
 
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/lCWXpaylZyZRAg4ODVTGr.png?ixlib=js-3.7.0 "image.png")
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/c8cfaa97-af5a-48f2-b855-224a5907f6d8)
 
 
-
-
-**Response based token  : **
+***Response based token:***
 
 
 
 - **Its user responsibility to send  token  in the header**
 
-
-![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/J0ZDK4nDSHS59SwzLehlJ.png?ixlib=js-3.7.0 "image.png")
-
+![image](https://github.com/pavan5yerra/nodejs/assets/53389849/5681c7f3-52e7-4fc0-aebc-18c8c0a7e147)
 
 
