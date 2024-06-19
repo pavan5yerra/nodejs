@@ -1,11 +1,11 @@
-Node JS Architecture  internal working
+***Node JS Architecture  internal working***
 
 
 
 Node Js is built with two components  V8 Engine (Google's) +   LibUV
 
 - V8  Engine is for Executing javascript code 
-- Lib UV is a library used for handling Eventloop and Thread Pools.
+- Lib UV is a library used for handling Eventloop , Thread Pools (non blocking I/O operations)
 
 
 
@@ -38,7 +38,7 @@ Node Js is built with two components  V8 Engine (Google's) +   LibUV
 
 
 
-**Execution Steps : **
+***Execution Steps***
 
 
 
@@ -54,7 +54,7 @@ It creates a  Node Environment where the main thread (single Thread) is created.
 5. Start the Event Loop
 
 
-**Event Loop trying to check  below in each iteration**
+***Event Loop trying to check  below in each iteration***
 
 1. Expired Times
 2. Async I/O callbacks
@@ -65,31 +65,13 @@ It creates a  Node Environment where the main thread (single Thread) is created.
 7. if no task exits Process
 
 
-
-
-
-
 ![image.png](https://eraser.imgix.net/workspaces/um5QKlcxzhTnWc1cS4cw/2TpPe0m2nPZODyVZctbl8Rh7kLL2/C-y6ZGRcU2tSSy7QUkWEs.png?ixlib=js-3.7.0 "image.png")
-
-
-
 
 
 ![image.png](https://eraser.imgix.net/workspaces/um5QKlcxzhTnWc1cS4cw/2TpPe0m2nPZODyVZctbl8Rh7kLL2/wJW3tR0DTCluORyxzm0pg.png?ixlib=js-3.7.0 "image.png")
 
 
-
-
-
-
-
-Understanding Architecture Flow Using Code 
-
-
-
-
-
-
+***Understanding Architecture Flow Using Code***
 
 ```javascript
  //module
