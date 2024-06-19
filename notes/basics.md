@@ -1,6 +1,4 @@
-****
-
-**Modules in Node js **
+***Modules in Node js***
 
 Math.js
 
@@ -78,7 +76,7 @@ module.exports = {
 
 
 
-**Creating a Server with HTTP module **
+***Creating a Server with HTTP module***
 
 
 
@@ -105,15 +103,10 @@ server.listen(8000,() => {
 ```
 
 
-URL's in details:
 
+***Handling routes in Node Js with switch Case***
 
-
-
-
-Handling routes in Node Js with switch Case
-
-```
+```javascript
 const server = http.createServer( (req,res) => {
     //loggin the reuqest  
     // we need to use async append ( non blocking write) other wise it will block the use request 
