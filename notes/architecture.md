@@ -15,9 +15,9 @@ Node Js is built with two components  V8 Engine (Google's) +   LibUV
 - However, Node.js is able to handle multiple concurrent requests by using an event loop.
 - The event loop is a mechanism that allows Node.js to listen for events and then execute callbacks when those events occur.
 
-- When a request comes in to a Node.js server, the request is added to the event queue.
-- The event loop then checks the event queue and executes the callback for the first request in the queue. T
-- he callback function is responsible for handling the request and then returning a response.
+- When a request comes in to a Node.js server, the request is added to the **event queue or callback queue**.
+- The event loop then checks the event queue and executes the callback for the first request in the queue.
+- The callback function is responsible for handling the request and then returning a response.
 - Once the callback function has returned a response, the event loop will then check the event queue again and execute the callback for the next request in the queue.
 - This process continues until all of the requests in the event queue have been processed.
 - The event loop architecture allows Node.js to handle multiple concurrent requests without blocking.
