@@ -52,12 +52,13 @@ npm install express jsonwebtoken bcryptjs mongoose body-parser
 
 
 
-```javascript
+``` javascript
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -98,8 +99,24 @@ const authenticateJWT = (req, res, next) => {
     }
 };
 
+// Rate limiter for all routes
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.'
+});
+
+app.use(apiLimiter);
+
+// Rate limiter for authentication routes
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 10, // limit each IP to 10 requests per windowMs
+    message: 'Too many authentication requests from this IP, please try again later.'
+});
+
 // Register
-app.post('/register', async (req, res) => {
+app.post('/register', authLimiter, async (req, res) => {
     const { username, password } = req.body;
 
     // Check if user already exists
@@ -117,7 +134,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Login
-app.post('/login', async (req, res) => {
+app.post('/login', authLimiter, async (req, res) => {
     const { username, password } = req.body;
 
     // Check if user exists
@@ -181,6 +198,8 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 ```
+
+
 
 
 ```
