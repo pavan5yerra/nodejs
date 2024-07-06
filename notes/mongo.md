@@ -991,6 +991,168 @@ db.orders.aggregate([
 ]
 ```
 
+**Sharding :**
+
+- Sharding is the process of storing data records across multiple machines and it is MongoDB's approach to meeting the demands of data growth.
+-  As the size of the data increases, a single machine may not be sufficient to store the data nor provide an acceptable read and write throughput.
+-  Sharding solves the problem with horizontal scaling. With sharding, you add more machines to support data growth and the demands of read and write operations.
+## Why Sharding?
+- In replication, all writes go to master node
+- Latency sensitive queries still go to master
+- Single replica set has limitation of 12 nodes
+- Memory can't be large enough when active dataset is big
+- Local disk is not big enough
+- Vertical scaling is too expensive
+
+
+![image.png](https://eraser.imgix.net/workspaces/TNMNzgWrRMo3BFe2Nh7o/2TpPe0m2nPZODyVZctbl8Rh7kLL2/CWjzSd-JqQSV2Hrg88JO3.png?ixlib=js-3.7.0 "image.png")
+
+
+
+- **Shards** − Shards are used to store data. They provide high availability and data consistency. In production environment, **each shard is a separate replica set.**
+- **Config Servers** − 
+    - Config servers store the cluster's metadata. This data **contains a mapping of the cluster's data set to the shards**. 
+    - **The query router uses this metadata to target operations to specific shards**. 
+    - In production environment, sharded clusters have exactly 3 config servers.
+- **Query Routers** − 
+    - Query routers are basically mongo instances, interface with client applications and direct operations to the appropriate shard. 
+    - The query router processes and targets the operations to shards and then returns results to the clients. 
+    - A sharded cluster can contain more than one query router to divide the client request load. A client sends requests to one query router. Generally, a sharded cluster have many query routers.
+
+
+
+
+**Refs in MongoDB : **
+
+
+
+```javascript
+--> Manual Refs
+
+
+db.users.insertMany([
+    { "_id": 1, "name": "Alice" },
+    { "_id": 2, "name": "Bob" },
+    { "_id": 3, "name": "Charlie" }
+])
+
+db.posts.insertMany([
+    { "_id": 101, "title": "First Post", "content": "This is the content of the first post.", "user_id": 1 },
+    { "_id": 102, "title": "Second Post", "content": "This is the content of the second post.", "user_id": 2 },
+    { "_id": 103, "title": "Third Post", "content": "This is the content of the third post.", "user_id": 1 }
+])
+
+--> To fetch posts with their associated user details using manual references:
+
+
+db.posts.aggregate([
+    {
+        $lookup: {
+            from: "users",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user"
+        }
+    },
+    {
+        $unwind: "$user"
+    },
+    {
+        $project: {
+            "_id": 1,
+            "title": 1,
+            "content": 1,
+            "user": { "_id": "$user._id", "name": "$user.name" }
+        }
+    }
+])
+
+//output
+
+[
+    {
+        "_id": 101,
+        "title": "First Post",
+        "content": "This is the content of the first post.",
+        "user": { "_id": 1, "name": "Alice" }
+    },
+    {
+        "_id": 102,
+        "title": "Second Post",
+        "content": "This is the content of the second post.",
+        "user": { "_id": 2, "name": "Bob" }
+    },
+    {
+        "_id": 103,
+        "title": "Third Post",
+        "content": "This is the content of the third post.",
+        "user": { "_id": 1, "name": "Alice" }
+    }
+]
+
+
+```
+
+
+
+
+**DB Refs : **
+
+
+
+```javascript
+
+--> DB Refs
+
+db.users.insertMany([
+    { "_id": 1, "name": "Alice" },
+    { "_id": 2, "name": "Bob" },
+    { "_id": 3, "name": "Charlie" }
+])
+
+db.posts.insertMany([
+    { "_id": 101, "title": "First Post", "content": "This is the content of the first post.", "user": { "$ref": "users", "$id": 1 } },
+    { "_id": 102, "title": "Second Post", "content": "This is the content of the second post.", "user": { "$ref": "users", "$id": 2 } },
+    { "_id": 103, "title": "Third Post", "content": "This is the content of the third post.", "user": { "$ref": "users", "$id": 1 } }
+])
+
+--> To fetch posts and resolve their associated users using DBRefs:
+  
+db.posts.find().forEach(function(post) {
+    var userRef = post.user;
+    var user = db.getCollection(userRef.$ref).findOne({ _id: userRef.$id });
+    printjson({
+        "_id": post._id,
+        "title": post.title,
+        "content": post.content,
+        "user": { "_id": user._id, "name": user.name }
+    });
+});
+
+
+//output
+{
+    "_id": 101,
+    "title": "First Post",
+    "content": "This is the content of the first post.",
+    "user": { "_id": 1, "name": "Alice" }
+}
+{
+    "_id": 102,
+    "title": "Second Post",
+    "content": "This is the content of the second post.",
+    "user": { "_id": 2, "name": "Bob" }
+}
+{
+    "_id": 103,
+    "title": "Third Post",
+    "content": "This is the content of the third post.",
+    "user": { "_id": 1, "name": "Alice" }
+}
+```
+
+
+
 
 
 
