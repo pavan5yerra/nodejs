@@ -620,4 +620,377 @@ db.users.createIndex(
 ****
 
 
+**Aggregations :**
+
+- It processes data records and return computed results.
+- It groups values from multiple documents and performs various operations, providing single result.
+- similar to group by operation in sql.
+
+
+**Sample data : **
+
+```
+{
+   _id: ObjectId(7df78ad8902c)
+   title: 'MongoDB Overview', 
+   description: 'MongoDB is no sql database',
+   by_user: 'tutorials point',
+   url: 'http://www.tutorialspoint.com',
+   tags: ['mongodb', 'database', 'NoSQL'],
+   likes: 100
+},
+{
+   _id: ObjectId(7df78ad8902d)
+   title: 'NoSQL Overview', 
+   description: 'No sql database is very fast',
+   by_user: 'tutorials point',
+   url: 'http://www.tutorialspoint.com',
+   tags: ['mongodb', 'database', 'NoSQL'],
+   likes: 10
+},
+{
+   _id: ObjectId(7df78ad8902e)
+   title: 'Neo4j Overview', 
+   description: 'Neo4j is no sql database',
+   by_user: 'Neo4j',
+   url: 'http://www.neo4j.com',
+   tags: ['neo4j', 'database', 'NoSQL'],
+   likes: 750
+},
+```
+
+
+```javascript
+-> how many tutorials are written by each user
+db.mycol.aggregate([{$group : {_id : "$by_user" , num_tutorials : {$sum:1}}}]);
+
+{ "_id" : "tutorials point", "num_tutorial" : 2 }
+{ "_id" : "Neo4j", "num_tutorial" : 1 }
+
+--> number of likes  for each user
+db.mycol.aggregate([{$group: {$id:"$by_user" , likes : {$sum : "$likes"}} } ]);
+
+{ "_id" : "tutorials point", "likes" : 110 }
+{ "_id" : "Neo4j", "likes" : 750 }
+
+--> average likes for each user
+db.mycol.aggregate([{$group: {$id:"$by_user" , likes : {$avg: "$likes"}} } ]);
+
+{ "_id" : "tutorials point", "likes" : 55}
+{ "_id" : "Neo4j", "likes" : 750 }
+
+--> minimum likes for each user
+db.mycol.aggregate([{$group: {$id:"$by_user" , likes : {$min: "$likes"}} } ]);
+
+{ "_id" : "tutorials point", "likes" : 10}
+{ "_id" : "Neo4j", "likes" : 750 }
+
+--> maximum likes for each user
+db.mycol.aggregate([{$group: {$id:"$by_user" , likes : {$max: "$likes"}} } ]);
+
+{ "_id" : "tutorials point", "likes" : 100}
+{ "_id" : "Neo4j", "likes" : 750 }
+
+--> using first 
+
+db.orders.aggregate([
+    {
+        $sort: { date: 1 }
+    },
+    {
+        $group: {
+            _id: "$customer",
+            firstOrder: { $first: "$$ROOT" }
+        }
+    }
+])
+
+
+```
+
+
+
+
+**Aggregation methods : **
+
+
+
+- **$project** − Used to select some specific fields from a collection.
+- **$match** − This is a filtering operation and thus this can reduce the amount of documents that are given as input to the next stage.
+- **$group** − This does the actual aggregation as discussed above.
+- **$sort** − Sorts the documents.
+- **$skip** − With this, it is possible to skip forward in the list of documents for a given amount of documents.
+- **$limit** − This limits the amount of documents to look at, by the given number starting from the current positions.
+- **$unwind** − This is used to unwind document that are using arrays. When using an array, the data is kind of pre-joined and this operation will be undone with this to have individual documents again. Thus with this stage we will increase the amount of documents for the next stage.
+
+
+
+
+
+
+**Example: Simple Aggregation with $match and $group**
+
+
+
+```javascript
+[
+    { "_id": 1, "item": "A", "quantity": 10, "price": 5 },
+    { "_id": 2, "item": "B", "quantity": 5, "price": 10 },
+    { "_id": 3, "item": "A", "quantity": 15, "price": 8 },
+    { "_id": 4, "item": "C", "quantity": 3, "price": 20 },
+    { "_id": 5, "item": "B", "quantity": 8, "price": 12 }
+]
+
+--> Total revenue for each item where qty > 5
+db.sales.aggregate([
+    { $match: { quantity: { $gt: 5 } } },
+    {
+        $group: {
+            _id: "$item",
+            totalRevenue: { $sum: { $multiply: ["$quantity", "$price"] } }
+        }
+    }
+])
+
+
+[
+    { "_id": "A", "totalRevenue": 200 },
+    { "_id": "B", "totalRevenue": 176 }
+]
+
+
+--> Sort by quantity in descending order and limit to 3 documents:
+db.sales.aggregate([
+    { $sort: { quantity: -1 } },
+    { $limit: 3 }
+])
+
+//output
+[
+    { "_id": 3, "item": "A", "quantity": 15, "price": 8 },
+    { "_id": 5, "item": "B", "quantity": 8, "price": 12 },
+    { "_id": 1, "item": "A", "quantity": 10, "price": 5 }
+]
+
+--> Project only item and total fields,
+ where total is the calculated total amount:
+
+db.sales.aggregate([
+    {
+        $project: {
+            _id: 0,
+            item: 1,
+            total: { $multiply: ["$quantity", "$price"] }
+        }
+    }
+])
+
+//output
+
+[
+    { "item": "A", "total": 50 },
+    { "item": "B", "total": 50 },
+    { "item": "A", "total": 120 },
+    { "item": "C", "total": 60 },
+    { "item": "B", "total": 96 }
+]
+
+
+```
+
+
+**Example : Aggregation with $project, $sort, and $limit**
+
+```javascript
+->Get the Highest salary employees in each department , along with name.
+[
+    { "_id": 1, "name": "Alice", "department": "HR", "salary": 50000 },
+    { "_id": 2, "name": "Bob", "department": "Engineering", "salary": 70000 },
+    { "_id": 3, "name": "Charlie", "department": "Sales", "salary": 60000 },
+    { "_id": 4, "name": "David", "department": "Engineering", "salary": 75000 },
+    { "_id": 5, "name": "Eve", "department": "HR", "salary": 55000 }
+]
+
+db.employees.aggregate([
+    {
+        $group: {
+            _id: "$department",
+            highestSalary: { $max: "$salary" },
+            employees: { $push: { name: "$name", salary: "$salary" } }
+        }
+    },
+    {
+        $project: {
+            _id: 1,
+            highestSalary: 1,
+            topEmployee: { $arrayElemAt: ["$employees", 0] }
+        }
+    },
+    { $sort: { highestSalary: -1 } },
+    { $limit: 3 }
+])
+
+
+//output
+[
+    {
+        "_id": "Engineering",
+        "highestSalary": 75000,
+        "topEmployee": { "name": "David", "salary": 75000 }
+    },
+    {
+        "_id": "Sales",
+        "highestSalary": 60000,
+        "topEmployee": { "name": "Charlie", "salary": 60000 }
+    },
+    {
+        "_id": "HR",
+        "highestSalary": 55000,
+        "topEmployee": { "name": "Alice", "salary": 50000 }
+    }
+]
+
+```
+
+
+**Example: Aggregation with $unwind**
+
+```javascript
+[
+    { "_id": 1, "order_id": "order1", "items": ["item1", "item2"] },
+    { "_id": 2, "order_id": "order2", "items": ["item2", "item3"] },
+    { "_id": 3, "order_id": "order3", "items": ["item1", "item3"] }
+]
+
+db.orders.aggregate([
+    { $unwind: "$items" }
+])
+
+[
+    { "_id": 1, "order_id": "order1", "items": "item1" },
+    { "_id": 1, "order_id": "order1", "items": "item2" },
+    { "_id": 2, "order_id": "order2", "items": "item2" },
+    { "_id": 2, "order_id": "order2", "items": "item3" },
+    { "_id": 3, "order_id": "order3", "items": "item1" },
+    { "_id": 3, "order_id": "order3", "items": "item3" }
+]
+
+```
+
+
+
+
+**Examples : **
+
+```
+[
+    { "_id": 1, "customer": "Alice", "total_amount": 50 },
+    { "_id": 2, "customer": "Bob", "total_amount": 30 },
+    { "_id": 3, "customer": "Alice", "total_amount": 20 },
+    { "_id": 4, "customer": "Charlie", "total_amount": 60 },
+    { "_id": 5, "customer": "Bob", "total_amount": 10 }
+]
+
+-->Calculate the total amount spent by each customer.
+db.orders.aggregate([
+    {
+        $group: {
+            _id: "$customer",
+            totalSpent: { $sum: "$total_amount" }
+        }
+    }
+])
+
+//output
+[
+    { "_id": "Alice", "totalSpent": 70 },
+    { "_id": "Bob", "totalSpent": 40 },
+    { "_id": "Charlie", "totalSpent": 60 }
+]
+
+
+
+-->Using the same orders collection, 
+let's find orders where the total amount is greater than 40, 
+sorted by total amount in descending order.
+
+db.orders.aggregate([
+    {
+        $match: {
+            total_amount: { $gt: 40 }
+        }
+    },
+    {
+        $sort: { total_amount: -1 }
+    }
+])
+
+//output
+
+[
+    { "_id": 4, "customer": "Charlie", "total_amount": 60 },
+    { "_id": 1, "customer": "Alice", "total_amount": 50 }
+]
+
+```
+
+
+
+
+**Example: Using $lookup for Joins**
+
+```javascript
+-> users
+[
+    { "_id": 1, "name": "Alice" },
+    { "_id": 2, "name": "Bob" }
+]
+
+-> orders
+[
+    { "_id": 1, "user_id": 1, "total_amount": 50 },
+    { "_id": 2, "user_id": 2, "total_amount": 30 },
+    { "_id": 3, "user_id": 1, "total_amount": 20 }
+]
+
+
+db.orders.aggregate([
+    {
+        $lookup: {
+            from: "users",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user"
+        }
+    },
+    {
+        $unwind: "$user"
+    }
+])
+
+//output
+[
+    {
+        "_id": 1,
+        "user_id": 1,
+        "total_amount": 50,
+        "user": { "_id": 1, "name": "Alice" }
+    },
+    {
+        "_id": 2,
+        "user_id": 2,
+        "total_amount": 30,
+        "user": { "_id": 2, "name": "Bob" }
+    },
+    {
+        "_id": 3,
+        "user_id": 1,
+        "total_amount": 20,
+        "user": { "_id": 1, "name": "Alice" }
+    }
+]
+```
+
+
+
 
