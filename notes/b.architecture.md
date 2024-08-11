@@ -68,9 +68,7 @@ It creates a  Node Environment where the main thread (single Thread) is created.
 
 ![image](https://github.com/pavan5yerra/nodejs/assets/53389849/73ee7031-f434-4fd2-a35d-06ab8695586c)
 
-
-![image](https://github.com/pavan5yerra/nodejs/assets/53389849/c85f016f-6068-4e9f-9b8d-17d6ab76a362)
-
+![image](https://github.com/user-attachments/assets/c863b6ba-e0d7-42aa-bf83-aa0deea1cc0d)
 
 ***Understanding Architecture Flow Using Code***
 
@@ -205,37 +203,66 @@ console.log(Date.now()-start,"password 4 DONE");
 
 ``` javascript
 const fs = require('fs');
-console.log('Before');
 
-fs.writeFile("sample.txt","hello" , () => {
-    console.log("hello");
-});
+console.log('Start');
 
 setTimeout(() => {
-    console.log("hello timer")
-},0)
+    console.log('Timer 1');
+}, 0);
 
-setImmediate(() => {
-    console.log("imme");
-})
-process.nextTick(() => {
-    console.log('Next tick');
+fs.readFile('sample.txt', () => {
+    console.log('File Read');
+    
+    setTimeout(() => {
+        console.log('Timer 2');
+    }, 0);
+    
+    setImmediate(() => {
+        console.log('Immediate 1');
+    });
 });
 
-console.log('After');
+process.nextTick(() => console.log("iam  next tick")); 
 
+setImmediate(() => {
+    console.log('Immediate 2');
+});
+
+console.log('End');
 
 /*
-
-'Before' (from console.log('Before');)
-'After' (from console.log('After');)
-'Next tick' (from process.nextTick(() => { console.log('Next tick'); });)
-'hello timer' (from setTimeout(() => { console.log("hello timer"); }, 0);)
-'hello' (from the fs.writeFile() callback)
-'imme' (from setImmediate(() => { console.log("imme"); });)
+  start
+  end
+  iam next tick
+  Timer 1
+  File Read
+  Immediate 2
+  Immediate 1
+  Timer2
+  
 */
 
 ```
+### Phases of Execution
+1. **Top-Level Code Execution**
+    - `**console.log('Start');**`  – Printed immediately.
+    - `**setTimeout(() => console.log('Timer 1'), 0);**`  – Schedules a timer with a 0 ms delay.
+    - `**fs.readFile('sample.txt', () => { ... });**`  – Initiates an asynchronous file read operation.
+    - `**process.nextTick(() => console.log("iam next tick"));**`  – Schedules a nextTick callback.
+    - `**setImmediate(() => console.log('Immediate 2'));**`  – Schedules an immediate callback.
+    - `**console.log('End');**`  – Printed immediately.
+2. `**process.nextTick()**` 
+    - The `process.nextTick()`  callback is executed after the current operation (top-level code) completes but before the event loop continues to the next phase.
+3. **Timers Phase**
+    - `**setTimeout()**`  callbacks are executed here. In this case, `Timer 1`  will be executed.
+4. **I/O Callbacks Phase**
+    - `**fs.readFile()**`  completes and its callback is executed here. Inside the callback:
+        - `**console.log('File Read');**`  – Printed.
+        - `**setTimeout(() => console.log('Timer 2'), 0);**`  – Schedules a new timer with a 0 ms delay.
+        - `**setImmediate(() => console.log('Immediate 1'));**`  – Schedules an immediate callback.
+5. **Check Phase**
+    - `**setImmediate()**`  callbacks are executed here. In this case, `Immediate 2`  and `Immediate 1`  will be executed.
+
 
 ****
 
