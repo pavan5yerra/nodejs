@@ -187,25 +187,55 @@ console.log(Date.now()-start,"password 4 DONE");
  
  
  //Output
- 
-
-
 -> hello from top code 
 -> Hello iam a timer1
 -> Hello iam an immediate1
 -> Iam I/o polling
--> Hello iam an immediate2
 -> Hello iam a timer2
--> Hello iam a timer3
+-> Hello iam an immediate2
 -> 600ms password 1 DONE
 -> 610ms password 2 DONE
 -> 609ms password 3 DONE
 -> 608ms password 4 DONE
 -> 1100ms password 4 DONE
+-> Hello iam a timer3
 ```
 
 
 
+``` javascript
+const fs = require('fs');
+console.log('Before');
+
+fs.writeFile("sample.txt","hello" , () => {
+    console.log("hello");
+});
+
+setTimeout(() => {
+    console.log("hello timer")
+},0)
+
+setImmediate(() => {
+    console.log("imme");
+})
+process.nextTick(() => {
+    console.log('Next tick');
+});
+
+console.log('After');
+
+
+/*
+
+'Before' (from console.log('Before');)
+'After' (from console.log('After');)
+'Next tick' (from process.nextTick(() => { console.log('Next tick'); });)
+'hello timer' (from setTimeout(() => { console.log("hello timer"); }, 0);)
+'hello' (from the fs.writeFile() callback)
+'imme' (from setImmediate(() => { console.log("imme"); });)
+*/
+
+```
 
 ****
 
