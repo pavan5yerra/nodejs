@@ -918,12 +918,20 @@ sorted by total amount in descending order.
 
 db.orders.aggregate([
     {
-        $match: {
-            total_amount: { $gt: 40 }
+        $group: {
+            _id: "$customer",
+            tot_amount: { $sum: "$total_amount" }
         }
     },
     {
-        $sort: { total_amount: -1 }
+        $match: {
+            tot_amount: { $gt: 40 }
+        }
+    },
+    {
+      $sort :{
+         tot_amount : -1
+      }
     }
 ])
 
