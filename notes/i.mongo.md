@@ -803,52 +803,54 @@ db.sales.aggregate([
 
 ```javascript
 ->Get the Highest salary employees in each department , along with name.
-[
+db.employees.insertMany(
+  [
     { "_id": 1, "name": "Alice", "department": "HR", "salary": 50000 },
     { "_id": 2, "name": "Bob", "department": "Engineering", "salary": 70000 },
     { "_id": 3, "name": "Charlie", "department": "Sales", "salary": 60000 },
     { "_id": 4, "name": "David", "department": "Engineering", "salary": 75000 },
-    { "_id": 5, "name": "Eve", "department": "HR", "salary": 55000 }
-]
+     { "_id": 5, "name": "Davids", "department": "Engineering", "salary": 76000 },
+    { "_id": 6, "name": "Eve", "department": "HR", "salary": 55000 }
+]);
 
 db.employees.aggregate([
+  { $group : 
     {
-        $group: {
-            _id: "$department",
-            highestSalary: { $max: "$salary" },
-            employees: { $push: { name: "$name", salary: "$salary" } }
-        }
-    },
-    {
-        $project: {
-            _id: 1,
-            highestSalary: 1,
-            topEmployee: { $arrayElemAt: ["$employees", 0] }
-        }
-    },
-    { $sort: { highestSalary: -1 } },
-    { $limit: 3 }
-])
-
-
-//output
-[
-    {
-        "_id": "Engineering",
-        "highestSalary": 75000,
-        "topEmployee": { "name": "David", "salary": 75000 }
-    },
-    {
-        "_id": "Sales",
-        "highestSalary": 60000,
-        "topEmployee": { "name": "Charlie", "salary": 60000 }
-    },
-    {
-        "_id": "HR",
-        "highestSalary": 55000,
-        "topEmployee": { "name": "Alice", "salary": 50000 }
+      _id : "$department" , 
+      highestSal : {$max : "$salary"} , 
+      employee: {$push: {name: "$name" , salary : "$salary"}}
     }
-]
+    
+  },
+  {
+    $unwind: "$employee"
+  },
+    
+  {
+        "$match": {
+            "$expr": {
+                "$eq": ["$employee.salary", "$highestSal"]
+            }
+        }
+    },
+
+  
+  { $sort: { highestSalary: -1 } },
+  
+  {
+        "$project": {
+            "_id": 0,
+            "department": "$_id",
+            "name": "$employee.name",
+            "salary": "$employee.salary"
+        }
+    }
+  
+  ])
+
+{ "department" : "Engineering", "name" : "Davids", "salary" : 76000 }
+{ "department" : "Sales", "name" : "Charlie", "salary" : 60000 }
+{ "department" : "HR", "name" : "Eve", "salary" : 55000 }
 
 ```
 
