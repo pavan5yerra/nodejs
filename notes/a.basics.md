@@ -73,6 +73,68 @@ module.exports = {
 }
 ```
 
+### File Stats :
+```javascript
+/*about a file or directory, such as size, creation time,
+and modification time.*/
+
+const fs = require('fs');
+
+fs.stat('example.txt', (err, stats) => {
+  if (err) throw err;
+  console.log('File stats:', stats);
+});
+```
+
+
+### File Watching:
+```javascript
+const fs = require('fs');
+
+fs.watch('example.txt', (eventType, filename) => {
+  if (filename) {
+    console.log(`File changed: ${filename}`);
+  } else {
+    console.log('Filename not provided');
+  }
+});
+
+console.log('Watching for changes...');
+```
+
+
+### Streams:
+```javascript
+const fs = require('fs');
+
+// Create a readable stream
+const readableStream = fs.createReadStream('large-file.txt', { encoding: 'utf8' });
+
+// Listen for 'data' events to read chunks of the file
+readableStream.on('data', (chunk) => {
+  console.log('Chunk received:', chunk);
+});
+
+// Handle the end of the stream
+readableStream.on('end', () => {
+  console.log('File reading completed.');
+});
+```
+```javascript
+const fs = require('fs');
+
+// Create a writable stream
+const writableStream = fs.createWriteStream('output.txt');
+
+// Write data to the stream
+writableStream.write('Hello, World!\n');
+writableStream.write('More data!');
+
+// End the stream
+writableStream.end(() => {
+  console.log('File writing completed.');
+});
+```
 
 
 
