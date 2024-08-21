@@ -21,7 +21,7 @@
     - Use nouns to represent resources.
     - Use plurals for resource collections.
     - Nested resources for hierarchical data.
-- **Versioning:** Include versioning in the URI (e.g., `/api/v1/` ).
+- **Versioning:** Include versioning in the URI (e.g., `/api/v1/`  ).
 - **Pagination, Filtering, and Sorting:** Implement pagination to manage large datasets, and allow filtering and sorting of results.
 ### 3. **Implement Security**
 - **Use HTTPS:** Always use HTTPS to encrypt data.
@@ -44,13 +44,22 @@
 ### 7. **Monitoring and Logging**
 - **Logging:** Implement logging to track API usage and errors.
 - **Monitoring:** Use monitoring tools to keep track of API performance and uptime.
+### 8. **Guiding principles of rest API**
+- **stateless **
+    - server should store any data related to client
+    - it should act as pure functions
+    - client can send data via request header or body / url params
+- **Caching **
+    - Caching the data is very important , it reduces the load and request for databases
+- **Resource identifictaion **
+    - identification need to very specific to single entity of a reosurce.
+    - api/get/book/1
+
+
+
 
 
 npm install express jsonwebtoken bcryptjs mongoose body-parser
-
-
-
-
 
 ``` javascript
 const express = require('express');
