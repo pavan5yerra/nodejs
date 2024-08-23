@@ -40,31 +40,33 @@ Node Js is built with two components  V8 Engine (Google's) +   LibUV
 ![image](https://github.com/pavan5yerra/nodejs/assets/53389849/fc76d234-6732-472f-bc8c-e12462a04d5f)
 ![image](https://github.com/pavan5yerra/nodejs/assets/53389849/630c5ad5-ee2d-43a9-acdf-d2f0d9be35b2)
 
-***Execution Steps***
-
-
+**_Execution Steps_**
 
 The initial step of node js is to run an entry point file (index.js). 
 
-It creates a  Node Environment where the main thread (single Thread) is created. The below steps happen inside it
+It creates a Node Environment where the main thread (single Thread) is created. The below steps happen inside it
 
 1. Initialize the project.
 2. Top-Level Code Execution 
-    1. code that is not  inside a function  or callback is called Top-level code
+    1. code that is not inside a function or if it a callback  function is called Top-level code
 3. Execution of Require Modules.
 4. Registering Event callbacks --> (SetTimeOut, SetIntervals)
 5. Start the Event Loop
 
+**_Event Loop trying to check below in each iteration_**
 
-***Event Loop trying to check  below in each iteration***
+1. Expired Timers
+2. check for the file read completely or not , 
+    1. if completes the executes the call back else if skip this phase
+    2. execution of this phase is completely base size of the file
+3. Idle phase
+4. Poll phase
+5. set Immediate
+6. close callbacks
+7. If any task is pending repeat all steps
+8. If no task is pending exit the Process.
+9. if no task exits Process
 
-1. Expired Times
-2. Async I/O callbacks
-3. set Immediate
-4. close callbacks
-5. If any task is pending repeat all steps
-6. If no task is pending exit the Process.
-7. if no task exits Process
 
 ![image](https://github.com/pavan5yerra/nodejs/assets/53389849/73ee7031-f434-4fd2-a35d-06ab8695586c)
 
