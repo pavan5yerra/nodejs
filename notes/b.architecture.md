@@ -185,18 +185,18 @@ console.log(Date.now()-start,"password 4 DONE");
  
  
  //Output
--> hello from top code 
--> Hello iam a timer1
--> Hello iam an immediate1
--> Iam I/o polling
--> Hello iam a timer2
--> Hello iam an immediate2
--> 600ms password 1 DONE
--> 610ms password 2 DONE
--> 609ms password 3 DONE
--> 608ms password 4 DONE
--> 1100ms password 4 DONE
--> Hello iam a timer3
+Hello from top code
+Hello, I am a timer1
+Hello, I am an immediate1
+I am I/O polling
+Hello, I am an immediate2
+Hello, I am a timer2
+[Time] password 1 DONE
+[Time] password 2 DONE
+[Time] password 3 DONE
+[Time] password 4 DONE
+[Time] password 5 DONE
+Hello, I am a timer3
 ```
 
 
